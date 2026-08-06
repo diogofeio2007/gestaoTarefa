@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdicionarTarefaController">
+<children>
+<VBox spacing="10.0" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20">
+<Label text="Adicionar Tarefa">
+            <font>
+               <Font name="Arial Bold" size="30" />
+            </font>
+            <VBox.margin>
+               <Insets left="20.0" />
+            </VBox.margin>
+         </Label>
+<Separator prefWidth="552.0" />
+<GridPane hgap="40" vgap="20">
+<columnConstraints><ColumnConstraints hgrow="ALWAYS" percentWidth="50" /><ColumnConstraints hgrow="ALWAYS" percentWidth="50" /></columnConstraints>
+<children>
+<VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0"><Label text="Título *" /><TextField fx:id="txtTitulo" promptText="Insira o título..." /></VBox>
+<VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0"><Label text="Categoria *" /><ComboBox fx:id="cbCategoria" maxWidth="1.7976931348623157E308" promptText="Selecione uma Categoria" /></VBox>
+<VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1"><Label text="Prioridade *" /><ComboBox fx:id="cbPrioridade" maxWidth="1.7976931348623157E308" promptText="Seleione a Prioridade" /></VBox>
+<VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1"><Label text="Data Limite" /><DatePicker fx:id="dpDataLimite" prefHeight="26.0" prefWidth="236.0" promptText="dd/mm/aaaa" /></VBox>
+<VBox spacing="8" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2"><Label text="Descrição" /><TextArea fx:id="txtDescricao" prefRowCount="5" promptText="Descrição da tarefa (opcional)..." /></VBox>
+</children>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+            <VBox.margin>
+               <Insets left="20.0" right="20.0" />
+            </VBox.margin>
+</GridPane>
+<HBox alignment="CENTER_RIGHT" spacing="30"><Button prefWidth="180.0" text="Cancelar" />
+    <Button prefWidth="180" style="-fx-background-color:black;-fx-text-fill:white;" text="Guardar" onAction="#guardarTarefa"/>
+            <VBox.margin>
+               <Insets left="20.0" right="20.0" />
+            </VBox.margin></HBox>
+         <HBox alignment="BOTTOM_LEFT">
+            <children>
+               <Label text="* Campos obrigatórios">
+                  <HBox.margin>
+                     <Insets left="20.0" right="20.0" />
+                  </HBox.margin>
+                  <font>
+                     <Font size="11.0" />
+                  </font>
+               </Label>
+            </children>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </HBox>
+</VBox>
+</children>
+</AnchorPane>
