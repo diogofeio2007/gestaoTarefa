@@ -9,22 +9,14 @@ public class Config {
     private static final Properties properties = new Properties();
 
     static {
-
-        try (InputStream input = Config.class.getClassLoader()
-                .getResourceAsStream("application.properties")) {
-
+        try (InputStream input = Config.class.getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(input);
-
         } catch (IOException e) {
-
             throw new RuntimeException(e);
-
         }
     }
 
     public static String get(String chave) {
-
         return properties.getProperty(chave);
-
     }
 }

@@ -9,11 +9,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/AdicionarTarefa.fxml"));
+                getClass().getResource("/fxml/ListarTarefas.fxml"));
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Adicionar Cliente");
+        stage.setTitle("Listar Tarefas");
 
         stage.setScene(scene);
 

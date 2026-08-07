@@ -2,13 +2,13 @@ package dao;
 
 import model.Tarefa;
 
+import javax.xml.validation.Validator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class TarefaDAO {
     private final Connection ligarDB;
-
     public TarefaDAO(Connection ligarDB) {
         this.ligarDB = ligarDB;
     }
