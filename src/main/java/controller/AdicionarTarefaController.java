@@ -100,8 +100,7 @@ public class AdicionarTarefaController {
     }
 
     public void guardarTarefa(){
-        if(!validarCampos()){
-
+        if(!validarCampos()) {
             return;
         }
 
@@ -112,16 +111,15 @@ public class AdicionarTarefaController {
         tarefa.setDescricao(txtDescricao.getText());
         for(Categoria categoria : categorias) {
             if(cbCategoria.getValue().equals(categoria.getNome())){
-                tarefa.setId_cat(categoria.getId_cat());
+                tarefa.setCategoria(categoria);
             }
         }
-
         try(Connection conexao = LigacaoDB.conectarDB()){
             TarefaDAO tarefaDAO =  new TarefaDAO(conexao);
             tarefaDAO.inserirTarefa(tarefa);
 
         } catch (SQLException e) {
-            System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
+            System.err.println("Erro ao conectar a base de dados: " + e.getMessage());
         }
     }
 }

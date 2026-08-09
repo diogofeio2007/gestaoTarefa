@@ -7,7 +7,7 @@ public class Tarefa {
     private String titulo;
     private String prioridade;
     private Boolean estado = false;
-    private Integer id_cat;
+    private Categoria categoria;
     private LocalDate data_criacao;
     private LocalDate data_limite;
     private LocalDate data_entrega;
@@ -48,12 +48,16 @@ public class Tarefa {
         this.estado = estado;
     }
 
-    public Integer getId_cat() {
-        return id_cat;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setId_cat(Integer id_cat) {
-        this.id_cat = id_cat;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Integer getId_categoria() {
+        return categoria.getId_cat();
     }
 
     public LocalDate getData_criacao() {
