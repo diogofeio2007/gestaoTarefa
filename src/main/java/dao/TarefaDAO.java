@@ -3,7 +3,6 @@ package dao;
 import model.Categoria;
 import model.Tarefa;
 
-import javax.xml.validation.Validator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +21,7 @@ public class TarefaDAO {
              stmt.setString(1, tarefa.getTitulo());
              stmt.setString(2, tarefa.getPrioridade());
              stmt.setBoolean(3, tarefa.getEstado());
-             stmt.setInt(4, tarefa.getId_categoria());
+             stmt.setInt(4, tarefa.getCategoria().getId_cat());
              stmt.setObject(5, tarefa.getData_limite());
              stmt.setString(6, tarefa.getDescricao());
              stmt.execute();
@@ -32,7 +31,7 @@ public class TarefaDAO {
     }
 
     // todo Alterar a parte da categoria
-    public ArrayList<Tarefa> listarTarefa(){
+    public ArrayList<Tarefa> listarTarefas(){
         Categoria categoria = new Categoria();
 
         String query = "SELECT tarefas.id_tarefa, tarefas.titulo, tarefas.id_cat, categorias.nome, tarefas.prioridade, tarefas.estado, tarefas.data_criacao, tarefas.data_limite, tarefas.data_entrega, tarefas.descricao FROM tarefas JOIN categorias ON tarefas.id_cat = categorias.id_cat;";

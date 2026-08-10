@@ -56,10 +56,6 @@ public class Tarefa {
         this.categoria = categoria;
     }
 
-    public Integer getId_categoria() {
-        return categoria.getId_cat();
-    }
-
     public LocalDate getData_criacao() {
         return data_criacao;
     }

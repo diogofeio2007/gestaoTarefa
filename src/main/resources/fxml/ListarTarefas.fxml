@@ -15,7 +15,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListarTarefasController">
    <children>
-      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <top>
             <GridPane minWidth="-Infinity" prefHeight="50.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
               <columnConstraints>
@@ -32,7 +32,7 @@
                         <Font name="Arial Bold" size="30" />
                      </font>
                   </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" style="-fx-background-color:black;-fx-text-fill:white;" text="+ Adicionar Tarefa" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" style="-fx-background-color:black;-fx-text-fill:white;" text="+ Adicionar Tarefa" GridPane.columnIndex="1" GridPane.halignment="RIGHT" onAction="#abrirAdicionarTarefa"/>
                   <Separator prefWidth="200.0" GridPane.rowIndex="1" />
                   <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
@@ -42,20 +42,50 @@
             </GridPane>
          </top>
          <center>
-            <TableView maxHeight="-Infinity" prefHeight="500.0" BorderPane.alignment="TOP_CENTER">
-              <columns>
-                <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Título" />
-                <TableColumn maxWidth="-Infinity" minWidth="150.0" prefWidth="-1.0" text="Categoria" />
-                  <TableColumn maxWidth="-1.0" minWidth="175.0" prefWidth="-1.0" text="Prioridade" />
-                  <TableColumn maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="Data Limite" />
-                  <TableColumn maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="Data Entrega" />
-                  <TableColumn maxWidth="-1.0" minWidth="175.0" prefWidth="-1.0" text="Estado" />
-                  <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Ações" />
-              </columns>
-               <BorderPane.margin>
-                  <Insets top="20.0" />
-               </BorderPane.margin>
-            </TableView>
+             <TableView fx:id="tblTarefas"
+                        maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308"
+                        BorderPane.alignment="CENTER">
+                 <columns>
+                     <TableColumn fx:id="colTitulo"
+                                  minWidth="150.0"
+                                  prefWidth="220.0"
+                                  text="Título"/>
+
+                     <TableColumn fx:id="colCategoria"
+                                  minWidth="100.0"
+                                  prefWidth="150.0"
+                                  text="Categoria"/>
+
+                     <TableColumn fx:id="colPrioridade"
+                                  minWidth="100.0"
+                                  prefWidth="130.0"
+                                  text="Prioridade"/>
+
+                     <TableColumn fx:id="colDataLimite"
+                                  minWidth="120.0"
+                                  prefWidth="140.0"
+                                  text="Data Limite"/>
+
+                     <TableColumn fx:id="colDataEntrega"
+                                  minWidth="120.0"
+                                  prefWidth="140.0"
+                                  text="Data Entrega"/>
+
+                     <TableColumn fx:id="colEstado"
+                                  minWidth="100.0"
+                                  prefWidth="120.0"
+                                  text="Estado"/>
+
+                     <TableColumn fx:id="colAcoes"
+                                  minWidth="150.0"
+                                  prefWidth="180.0"
+                                  text="Ações"/>
+                 </columns>
+                 <BorderPane.margin>
+                     <Insets top="20.0"/>
+                 </BorderPane.margin>
+             </TableView>
          </center>
       </BorderPane>
    </children>

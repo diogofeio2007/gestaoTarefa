@@ -70,7 +70,7 @@
                <Insets left="20.0" right="20.0" />
             </VBox.margin>
 </GridPane>
-<HBox alignment="CENTER_RIGHT" spacing="30"><Button prefWidth="180.0" text="Cancelar" />
+<HBox alignment="CENTER_RIGHT" spacing="30"><Button prefWidth="180.0" text="Cancelar" onAction="#abrirListarTarefas"/>
     <Button onAction="#guardarTarefa" prefWidth="180" style="-fx-background-color:black;-fx-text-fill:white;" text="Guardar" />
             <VBox.margin>
                <Insets left="20.0" right="20.0" top="8.0" />

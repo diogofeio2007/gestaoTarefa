@@ -3,13 +3,20 @@ package controller;
 import dao.CategoriaDAO;
 import dao.LigacaoDB;
 import dao.TarefaDAO;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import model.Categoria;
 import model.Tarefa;
 import util.Alertas;
 import util.Validacoes;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -82,6 +89,10 @@ public class AdicionarTarefaController {
         }
 
         if(validarTitulo && validarCategoria && validarPrioridade){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Tarefa Guardada!");
+            alert.setHeaderText("Tarefa guardada com sucesso!");
+            alert.showAndWait();
             return true;
         }
         else{
@@ -121,5 +132,20 @@ public class AdicionarTarefaController {
         } catch (SQLException e) {
             System.err.println("Erro ao conectar a base de dados: " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void abrirListarTarefas(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/ListarTarefas.fxml")
+        );
+
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("Listagem Tarefas");
+
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
