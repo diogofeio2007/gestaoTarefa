@@ -14,7 +14,7 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load());
 
         stage.setTitle("Listar Tarefas");
-
+        stage.setMaximized(true);
         stage.setScene(scene);
 
         stage.show();
