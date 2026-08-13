@@ -9,14 +9,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Categoria;
 import model.Tarefa;
@@ -50,6 +52,9 @@ public class ListarTarefasController {
     private TableColumn<Tarefa, String> colEstado;
 
     @FXML
+    private TableColumn<Tarefa, Void> colAcao;
+
+    @FXML
     private TextField txtPesquisa;
 
     @FXML
@@ -68,31 +73,155 @@ public class ListarTarefasController {
 
     public void initialize(){
         apresentarFiltros();
-
-            cbFiltroCategoria.getSelectionModel().selectFirst();
-        cbFiltroPrioridade.getSelectionModel().selectFirst();
-        cbFiltroEstado.getSelectionModel().selectFirst();
-
         apresentarTabela();
+        configurarColunaAcoes();
+    }
+
+    private void configurarColunaAcoes() {
+
+        colAcao.setCellFactory(param -> new TableCell<Tarefa, Void>() {
+
+            private final Button btnEditar = new Button();
+            private final Button btnConcluir = new Button();
+            private final Button btnEliminar = new Button();
+
+            private final ImageView imgEditarView = new ImageView(new Image(getClass().getResourceAsStream("/images/editar.png")));
+
+            private final ImageView imgConcluirView = new ImageView(new Image(getClass().getResourceAsStream("/images/concluir.png")));
+
+            private final ImageView imgEliminarView = new ImageView(new Image(getClass().getResourceAsStream("/images/eliminar.png")));
+
+            private final HBox container = new HBox(10, btnEditar, btnConcluir, btnEliminar);
+            {
+                configurarImagem(imgEditarView);
+                configurarImagem(imgConcluirView);
+                configurarImagem(imgEliminarView);
+
+                btnEditar.setGraphic(imgEditarView);
+                btnConcluir.setGraphic(imgConcluirView);
+                btnEliminar.setGraphic(imgEliminarView);
+
+                container.setAlignment(Pos.CENTER);
+
+                // Ação do botão editar
+                btnEditar.setOnAction(event -> {
+
+                    Tarefa tarefa = getTableView()
+                            .getItems()
+                            .get(getIndex());
+
+                    editarTarefa(tarefa);
+                });
+
+                // Ação do botão concluir
+                btnConcluir.setOnAction(event -> {
+
+                    Tarefa tarefa = getTableView()
+                            .getItems()
+                            .get(getIndex());
+
+                    concluirTarefa(tarefa);
+                });
+
+                // Ação do botão eliminar
+                btnEliminar.setOnAction(event -> {
+
+                    Tarefa tarefa = getTableView()
+                            .getItems()
+                            .get(getIndex());
+
+                    eliminarTarefa(tarefa);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(container);
+                }
+            }
+        });
+    }
+
+    private void configurarImagem(ImageView imagem) {
+        imagem.setFitWidth(20);
+        imagem.setFitHeight(20);
+        imagem.setPreserveRatio(true);
+    }
+
+    @FXML
+    private void editarTarefa(Tarefa tarefa){
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/EditarTarefa.fxml")
+            );
+
+            Parent root = loader.load();
+
+            EditarTarefaController controller = loader.getController();
+
+            // Envia a tarefa para o controller
+            controller.setTarefa(tarefa);
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar Tarefa");
+            stage.setScene(new Scene(root));
+
+            // Torna a janela modal
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            // Impede interação com a janela principal
+            stage.initOwner(tblTarefas.getScene().getWindow());
+
+            stage.showAndWait();
+
+            // Depois de fechar o modal, atualiza a tabela
+            apresentarTabela();
+
+
+        } catch (IOException e) {
+            System.err.println("Erro ao abrir EditarTarefa.fxml: " + e.getMessage());
+        }
+    }
+
+    private void concluirTarefa(Tarefa tarefa) {
+        System.out.println(
+                "Concluir tarefa: " + tarefa.getTitulo()
+        );
+
+    }
+
+    private void eliminarTarefa(Tarefa tarefa) {
+
+        System.out.println(
+                "Eliminar tarefa: " + tarefa.getTitulo()
+        );
+
     }
 
     @FXML
     private void filtrarTabela() {
+        String texto = txtPesquisa.getText().trim();
+        String categoriaSelecionada = cbFiltroCategoria.getValue();
+        String prioridadeSelecionada = cbFiltroPrioridade.getValue();
+        String estadoSelecionado = cbFiltroEstado.getValue();
 
-        String categoriaSelecionada =
-                cbFiltroCategoria.getValue();
-
-        String prioridadeSelecionada =
-                cbFiltroPrioridade.getValue();
-
-        String estadoSelecionado =
-                cbFiltroEstado.getValue();
-
-        ObservableList<Tarefa> tarefasFiltradas =
+        tarefasFiltradas =
                 FXCollections.observableArrayList();
 
         for (Tarefa tarefa : tarefas) {
             boolean valido = true;
+
+            if(!texto.isEmpty()){
+                if (!tarefa.getTitulo().toLowerCase().contains(texto.toLowerCase())) {
+                    valido = false;
+                }
+            }
 
             if (categoriaSelecionada != null && !categoriaSelecionada.equals(cbFiltroCategoria.getItems().getFirst())) {
                 if (!tarefa.getCategoria().getNome().equals(categoriaSelecionada)) {
@@ -128,6 +257,7 @@ public class ListarTarefasController {
 
     @FXML
     private void limparFiltros() {
+        txtPesquisa.clear();
         cbFiltroCategoria.getSelectionModel().selectFirst();
         cbFiltroPrioridade.getSelectionModel().selectFirst();
         cbFiltroEstado.getSelectionModel().selectFirst();
@@ -150,6 +280,10 @@ public class ListarTarefasController {
         }
 
         cbFiltroEstado.getItems().setAll("Todos os Estados", "Concluído", "Pendente");
+
+        cbFiltroCategoria.getSelectionModel().selectFirst();
+        cbFiltroPrioridade.getSelectionModel().selectFirst();
+        cbFiltroEstado.getSelectionModel().selectFirst();
     }
 
     private void apresentarTabela(){

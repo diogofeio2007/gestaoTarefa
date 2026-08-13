@@ -29,6 +29,21 @@ public class TarefaDAO {
             System.err.println(e.getMessage());
         }
     }
+    public void atualizarTarefa(Tarefa tarefa){
+        String query = "UPDATE tarefas SET (titulo, prioridade, estado, id_cat, data_limite, descricao) = (?, ?, ?, ?, ?, ?) WHERE id_tarefa = ?;";
+        try(PreparedStatement stmt = ligarDB.prepareStatement(query)){
+            stmt.setString(1, tarefa.getTitulo());
+            stmt.setString(2, tarefa.getPrioridade());
+            stmt.setBoolean(3, tarefa.getEstado());
+            stmt.setInt(4, tarefa.getCategoria().getId_cat());
+            stmt.setObject(5, tarefa.getData_limite());
+            stmt.setString(6, tarefa.getDescricao());
+            stmt.setInt(7, tarefa.getId_tarefa());
+            stmt.execute();
+        } catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     // todo Alterar a parte da categoria
     public ArrayList<Tarefa> listarTarefas(){
