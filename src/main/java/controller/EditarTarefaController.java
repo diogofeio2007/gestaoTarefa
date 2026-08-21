@@ -154,5 +154,6 @@ public class EditarTarefaController {
     @FXML
     public void abrirListarTarefas(ActionEvent event) throws IOException {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
-        stage.close();    }
+        stage.close();
+    }
 }

@@ -13,7 +13,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Listar Tarefas");
+        stage.setTitle("Gestor de Tarefas");
         stage.setMaximized(true);
         stage.setScene(scene);
 

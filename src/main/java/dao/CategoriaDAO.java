@@ -14,7 +14,7 @@ public class CategoriaDAO {
     public CategoriaDAO(Connection ligarDB) {
         this.ligarDB = ligarDB;
     }
-    /* todo Caso vá criar wireframe para inserir Categoria
+    /* TODO Opcional - Caso vá criar wireframe para inserir Categoria.
     public void insirirCategoria(Categoria categoria) {
         String query = "INSERT INTO categorias(nome) VALUES (?)";
         try(PreparedStatement stmt = ligarDB.prepareStatement(query)){

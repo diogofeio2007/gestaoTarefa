@@ -3,12 +3,7 @@ package controller;
 import dao.CategoriaDAO;
 import dao.LigacaoDB;
 import dao.TarefaDAO;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Categoria;
@@ -38,6 +33,8 @@ public class AdicionarTarefaController {
     private DatePicker dpDataLimite;
     @FXML
     private TextArea txtDescricao;
+    @FXML
+    private Button btnCancelar;
 
     ArrayList<Categoria> categorias = new ArrayList<>();
 
@@ -58,9 +55,9 @@ public class AdicionarTarefaController {
     public boolean validarCampos(){
         Validacoes validacoes = new Validacoes();
         Alertas alertas = new Alertas();
-        boolean validarTitulo = (validacoes.textoVazio(txtTitulo)) ?  true : false;
-        boolean validarCategoria = (validacoes.comboBoxVazio(cbCategoria)) ?  true : false;
-        boolean validarPrioridade = (validacoes.comboBoxVazio(cbPrioridade)) ?  true : false;
+        boolean validarTitulo = validacoes.textoVazio(txtTitulo);
+        boolean validarCategoria = validacoes.comboBoxVazio(cbCategoria);
+        boolean validarPrioridade = validacoes.comboBoxVazio(cbPrioridade);
 
         String mensagemErro = "";
 
@@ -135,17 +132,8 @@ public class AdicionarTarefaController {
     }
 
     @FXML
-    public void abrirListarTarefas(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/ListarTarefas.fxml")
-        );
-
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Listagem Tarefas");
-
-        stage.setScene(new Scene(root));
-        stage.show();
+    public void abrirListarTarefas() throws IOException {
+            Stage stage = (Stage) btnCancelar.getScene().getWindow();
+            stage.close();
     }
 }

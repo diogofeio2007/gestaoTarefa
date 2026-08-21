@@ -10,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Categoria;
@@ -30,6 +30,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ListarTarefasController {
+
+    // =========================================================
+    // TABELA
+    // =========================================================
+
     @FXML
     private TableView<Tarefa> tblTarefas;
 
@@ -54,6 +59,11 @@ public class ListarTarefasController {
     @FXML
     private TableColumn<Tarefa, Void> colAcao;
 
+
+    // =========================================================
+    // FILTROS
+    // =========================================================
+
     @FXML
     private TextField txtPesquisa;
 
@@ -67,264 +77,853 @@ public class ListarTarefasController {
     private ComboBox<String> cbFiltroEstado;
 
 
-    ObservableList<Tarefa> tarefas;
-    ObservableList<Tarefa> tarefasFiltradas;
-    ArrayList<Categoria> categorias =  new ArrayList<>();
+    // =========================================================
+    // PAGINAÇÃO
+    // =========================================================
 
-    public void initialize(){
+    @FXML
+    private Pagination paginacao;
+
+    private static final int TAREFAS_POR_PAGINA = 10;
+
+
+    // =========================================================
+    // LISTAS
+    // =========================================================
+
+    private ObservableList<Tarefa> tarefas =
+            FXCollections.observableArrayList();
+
+    private ObservableList<Tarefa> tarefasFiltradas =
+            FXCollections.observableArrayList();
+
+    private ArrayList<Categoria> categorias =
+            new ArrayList<>();
+
+
+    // =========================================================
+    // INITIALIZE
+    // =========================================================
+
+    public void initialize() {
+
         apresentarFiltros();
+
         apresentarTabela();
+
         configurarColunaAcoes();
     }
 
+
+    // =========================================================
+    // COLUNA AÇÕES
+    // =========================================================
+
     private void configurarColunaAcoes() {
 
-        colAcao.setCellFactory(param -> new TableCell<Tarefa, Void>() {
+        colAcao.setCellFactory(param ->
+                new TableCell<Tarefa, Void>() {
 
-            private final Button btnEditar = new Button();
-            private final Button btnConcluir = new Button();
-            private final Button btnEliminar = new Button();
+                    private final Button btnEditar = new Button();
+                    private final Button btnConcluir = new Button();
+                    private final Button btnEliminar = new Button();
 
-            private final ImageView imgEditarView = new ImageView(new Image(getClass().getResourceAsStream("/images/editar.png")));
+                    private final ImageView imgEditarView =
+                            new ImageView(
+                                    new Image(
+                                            getClass()
+                                                    .getResourceAsStream(
+                                                            "/images/editar.png"
+                                                    )
+                                    )
+                            );
 
-            private final ImageView imgConcluirView = new ImageView(new Image(getClass().getResourceAsStream("/images/concluir.png")));
+                    private final ImageView imgConcluirView =
+                            new ImageView(
+                                    new Image(
+                                            getClass()
+                                                    .getResourceAsStream(
+                                                            "/images/concluir.png"
+                                                    )
+                                    )
+                            );
 
-            private final ImageView imgEliminarView = new ImageView(new Image(getClass().getResourceAsStream("/images/eliminar.png")));
+                    private final ImageView imgEliminarView =
+                            new ImageView(
+                                    new Image(
+                                            getClass()
+                                                    .getResourceAsStream(
+                                                            "/images/eliminar.png"
+                                                    )
+                                    )
+                            );
 
-            private final HBox container = new HBox(10, btnEditar, btnConcluir, btnEliminar);
-            {
-                configurarImagem(imgEditarView);
-                configurarImagem(imgConcluirView);
-                configurarImagem(imgEliminarView);
+                    private final HBox container =
+                            new HBox(
+                                    10,
+                                    btnEditar,
+                                    btnConcluir,
+                                    btnEliminar
+                            );
 
-                btnEditar.setGraphic(imgEditarView);
-                btnConcluir.setGraphic(imgConcluirView);
-                btnEliminar.setGraphic(imgEliminarView);
 
-                container.setAlignment(Pos.CENTER);
+                    {
+                        configurarImagem(imgEditarView);
+                        configurarImagem(imgConcluirView);
+                        configurarImagem(imgEliminarView);
 
-                // Ação do botão editar
-                btnEditar.setOnAction(event -> {
+                        btnEditar.setGraphic(imgEditarView);
+                        btnConcluir.setGraphic(imgConcluirView);
+                        btnEliminar.setGraphic(imgEliminarView);
 
-                    Tarefa tarefa = getTableView()
-                            .getItems()
-                            .get(getIndex());
+                        container.setAlignment(Pos.CENTER);
 
-                    editarTarefa(tarefa);
-                });
 
-                // Ação do botão concluir
-                btnConcluir.setOnAction(event -> {
+                        // EDITAR
+                        btnEditar.setOnAction(event -> {
 
-                    Tarefa tarefa = getTableView()
-                            .getItems()
-                            .get(getIndex());
+                            Tarefa tarefa =
+                                    getTableView()
+                                            .getItems()
+                                            .get(getIndex());
 
-                    concluirTarefa(tarefa);
-                });
+                            editarTarefa(tarefa);
+                        });
 
-                // Ação do botão eliminar
-                btnEliminar.setOnAction(event -> {
 
-                    Tarefa tarefa = getTableView()
-                            .getItems()
-                            .get(getIndex());
+                        // CONCLUIR
+                        btnConcluir.setOnAction(event -> {
 
-                    eliminarTarefa(tarefa);
-                });
-            }
+                            Tarefa tarefa =
+                                    getTableView()
+                                            .getItems()
+                                            .get(getIndex());
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
+                            concluirTarefa(tarefa);
+                        });
 
-                super.updateItem(item, empty);
 
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(container);
+                        // ELIMINAR
+                        btnEliminar.setOnAction(event -> {
+
+                            Tarefa tarefa =
+                                    getTableView()
+                                            .getItems()
+                                            .get(getIndex());
+
+                            eliminarTarefa(tarefa);
+                        });
+                    }
+
+
+                    @Override
+                    protected void updateItem(
+                            Void item,
+                            boolean empty
+                    ) {
+
+                        super.updateItem(item, empty);
+
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(container);
+                        }
+                    }
                 }
-            }
-        });
+        );
     }
 
+
+    // =========================================================
+    // CONFIGURAR IMAGENS
+    // =========================================================
+
     private void configurarImagem(ImageView imagem) {
+
         imagem.setFitWidth(20);
         imagem.setFitHeight(20);
         imagem.setPreserveRatio(true);
     }
 
-    @FXML
-    private void editarTarefa(Tarefa tarefa){
+
+    // =========================================================
+    // PAGINAÇÃO
+    // =========================================================
+
+    private void configurarPaginacao(ObservableList<Tarefa> lista) {
+
+        int numeroPaginas = (int) Math.ceil(
+                (double) lista.size() / TAREFAS_POR_PAGINA
+        );
+
+        paginacao.setPageCount(Math.max(numeroPaginas, 1));
+
+        paginacao.setCurrentPageIndex(0);
+
+        paginacao.setPageFactory(paginaIndex -> {
+
+            mostrarPagina(paginaIndex, lista);
+
+            return new VBox();
+        });
+    }
+
+
+    // =========================================================
+    // MOSTRAR PÁGINA
+    // =========================================================
+
+    private void mostrarPagina(int pagina, ObservableList<Tarefa> lista) {
+
+        int inicio = pagina * TAREFAS_POR_PAGINA;
+
+        if (inicio >= lista.size()) {
+            tblTarefas.setItems(FXCollections.observableArrayList());
+            return;
+        }
+
+        int fim = Math.min(
+                inicio + TAREFAS_POR_PAGINA,
+                lista.size()
+        );
+
+        ObservableList<Tarefa> paginaAtual =
+                FXCollections.observableArrayList(
+                        lista.subList(inicio, fim)
+                );
+
+        tblTarefas.setItems(paginaAtual);
+    }
+
+
+    // =========================================================
+    // EDITAR
+    // =========================================================
+
+    private void editarTarefa(Tarefa tarefa) {
+
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/EditarTarefa.fxml")
-            );
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/fxml/EditarTarefa.fxml"
+                            )
+                    );
 
             Parent root = loader.load();
 
-            EditarTarefaController controller = loader.getController();
+            EditarTarefaController controller =
+                    loader.getController();
 
-            // Envia a tarefa para o controller
             controller.setTarefa(tarefa);
 
+
             Stage stage = new Stage();
+
             stage.setTitle("Editar Tarefa");
-            stage.setScene(new Scene(root));
 
-            // Torna a janela modal
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(
+                    new Scene(root)
+            );
 
-            // Impede interação com a janela principal
-            stage.initOwner(tblTarefas.getScene().getWindow());
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
+
+            /*
+             * Aqui usamos a Scene da tabela porque neste momento
+             * ela já está aberta.
+             */
+
+            stage.initOwner(
+                    tblTarefas
+                            .getScene()
+                            .getWindow()
+            );
 
             stage.showAndWait();
 
-            // Depois de fechar o modal, atualiza a tabela
+
+            // Atualizar dados depois de fechar
             apresentarTabela();
 
-
         } catch (IOException e) {
-            System.err.println("Erro ao abrir EditarTarefa.fxml: " + e.getMessage());
+
+            System.err.println(
+                    "Erro ao abrir EditarTarefa.fxml:"
+            );
+
+            e.printStackTrace();
         }
     }
 
-    private void concluirTarefa(Tarefa tarefa) {
-        System.out.println(
-                "Concluir tarefa: " + tarefa.getTitulo()
-        );
 
+    // =========================================================
+    // CONCLUIR
+    // =========================================================
+
+    private void concluirTarefa(Tarefa tarefa) {
+
+        try {
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/fxml/ConcluirTarefa.fxml"
+                            )
+                    );
+
+            Parent root = loader.load();
+
+            ConcluirTarefaController controller =
+                    loader.getController();
+
+            controller.setTarefa(tarefa);
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle("Concluir Tarefa");
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
+
+            stage.initOwner(
+                    tblTarefas
+                            .getScene()
+                            .getWindow()
+            );
+
+            stage.showAndWait();
+
+
+            apresentarTabela();
+
+        } catch (IOException e) {
+
+            System.err.println(
+                    "Erro ao abrir ConcluirTarefa.fxml:"
+            );
+
+            e.printStackTrace();
+        }
     }
+
+
+    // =========================================================
+    // ELIMINAR
+    // =========================================================
 
     private void eliminarTarefa(Tarefa tarefa) {
 
-        System.out.println(
-                "Eliminar tarefa: " + tarefa.getTitulo()
-        );
+        try {
 
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/fxml/EliminarTarefa.fxml"
+                            )
+                    );
+
+            Parent root = loader.load();
+
+            EliminarTarefaController controller =
+                    loader.getController();
+
+            controller.setTarefa(tarefa);
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle("Eliminar Tarefa");
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
+
+            stage.initOwner(
+                    tblTarefas
+                            .getScene()
+                            .getWindow()
+            );
+
+            stage.showAndWait();
+
+
+            apresentarTabela();
+
+        } catch (IOException e) {
+
+            System.err.println(
+                    "Erro ao abrir EliminarTarefa.fxml:"
+            );
+
+            e.printStackTrace();
+        }
     }
+
+
+    // =========================================================
+    // FILTRAR
+    // =========================================================
 
     @FXML
     private void filtrarTabela() {
-        String texto = txtPesquisa.getText().trim();
-        String categoriaSelecionada = cbFiltroCategoria.getValue();
-        String prioridadeSelecionada = cbFiltroPrioridade.getValue();
-        String estadoSelecionado = cbFiltroEstado.getValue();
+
+        String texto =
+                txtPesquisa
+                        .getText()
+                        .trim()
+                        .toLowerCase();
+
+
+        String categoriaSelecionada =
+                cbFiltroCategoria.getValue();
+
+        String prioridadeSelecionada =
+                cbFiltroPrioridade.getValue();
+
+        String estadoSelecionado =
+                cbFiltroEstado.getValue();
+
 
         tarefasFiltradas =
                 FXCollections.observableArrayList();
 
+
         for (Tarefa tarefa : tarefas) {
+
             boolean valido = true;
 
-            if(!texto.isEmpty()){
-                if (!tarefa.getTitulo().toLowerCase().contains(texto.toLowerCase())) {
+
+            // PESQUISA
+            if (!texto.isEmpty()) {
+
+                if (
+                        tarefa.getTitulo() == null
+                                ||
+                                !tarefa
+                                        .getTitulo()
+                                        .toLowerCase()
+                                        .contains(texto)
+                ) {
+
                     valido = false;
                 }
             }
 
-            if (categoriaSelecionada != null && !categoriaSelecionada.equals(cbFiltroCategoria.getItems().getFirst())) {
-                if (!tarefa.getCategoria().getNome().equals(categoriaSelecionada)) {
+
+            // CATEGORIA
+            if (
+                    categoriaSelecionada != null
+                            &&
+                            !categoriaSelecionada.equals(
+                                    "Todas as Categorias"
+                            )
+            ) {
+
+                if (
+                        tarefa.getCategoria() == null
+                                ||
+                                !tarefa
+                                        .getCategoria()
+                                        .getNome()
+                                        .equals(
+                                                categoriaSelecionada
+                                        )
+                ) {
+
                     valido = false;
                 }
             }
 
-            if (prioridadeSelecionada != null && !prioridadeSelecionada.equals(cbFiltroPrioridade.getItems().getFirst())) {
-                if (!tarefa.getPrioridade().equals(prioridadeSelecionada)) {
+
+            // PRIORIDADE
+            if (
+                    prioridadeSelecionada != null
+                            &&
+                            !prioridadeSelecionada.equals(
+                                    "Todas as Prioridades"
+                            )
+            ) {
+
+                if (
+                        !tarefa
+                                .getPrioridade()
+                                .equals(
+                                        prioridadeSelecionada
+                                )
+                ) {
+
                     valido = false;
                 }
             }
 
-            if (estadoSelecionado != null && !estadoSelecionado.equals(cbFiltroEstado.getItems().getFirst())) {
-                boolean estado = tarefa.getEstado();
 
-                if (estadoSelecionado.equals("Concluído") && !estado) {
+            // ESTADO
+            if (
+                    estadoSelecionado != null
+                            &&
+                            !estadoSelecionado.equals(
+                                    "Todos os Estados"
+                            )
+            ) {
+
+                boolean estado =
+                        tarefa.getEstado();
+
+
+                if (
+                        estadoSelecionado.equals(
+                                "Concluído"
+                        )
+                                &&
+                                !estado
+                ) {
+
                     valido = false;
                 }
 
-                if (estadoSelecionado.equals("Pendente") && estado) {
+
+                if (
+                        estadoSelecionado.equals(
+                                "Pendente"
+                        )
+                                &&
+                                estado
+                ) {
+
                     valido = false;
                 }
             }
+
 
             if (valido) {
+
                 tarefasFiltradas.add(tarefa);
             }
         }
 
-        tblTarefas.setItems(tarefasFiltradas);
+
+        configurarPaginacao(
+                tarefasFiltradas
+        );
     }
+
+
+    // =========================================================
+    // LIMPAR FILTROS
+    // =========================================================
 
     @FXML
     private void limparFiltros() {
+
         txtPesquisa.clear();
-        cbFiltroCategoria.getSelectionModel().selectFirst();
-        cbFiltroPrioridade.getSelectionModel().selectFirst();
-        cbFiltroEstado.getSelectionModel().selectFirst();
 
-        tblTarefas.setItems(tarefas);
+        cbFiltroCategoria
+                .getSelectionModel()
+                .selectFirst();
+
+        cbFiltroPrioridade
+                .getSelectionModel()
+                .selectFirst();
+
+        cbFiltroEstado
+                .getSelectionModel()
+                .selectFirst();
+
+
+        configurarPaginacao(
+                tarefas
+        );
     }
 
-    private void apresentarFiltros(){
-        cbFiltroPrioridade.getItems().setAll("Todas as Prioridades", "Baixa", "Media", "Alta");
-        try(Connection conexao = LigacaoDB.conectarDB()){
-            CategoriaDAO categoriaDAO = new CategoriaDAO(conexao);
-            categorias.addAll(categoriaDAO.listarCategorias());
 
-            cbFiltroCategoria.getItems().add("Todas as Categorias");
-            for(Categoria categoria : categorias){
-                cbFiltroCategoria.getItems().add(categoria.getNome());
+    // =========================================================
+    // APRESENTAR FILTROS
+    // =========================================================
+
+    private void apresentarFiltros() {
+
+        // PRIORIDADES
+
+        cbFiltroPrioridade
+                .getItems()
+                .setAll(
+                        "Todas as Prioridades",
+                        "Baixa",
+                        "Media",
+                        "Alta"
+                );
+
+
+        // CATEGORIAS
+
+        try (
+                Connection conexao =
+                        LigacaoDB.conectarDB()
+        ) {
+
+            CategoriaDAO categoriaDAO =
+                    new CategoriaDAO(conexao);
+
+
+            categorias.addAll(
+                    categoriaDAO.listarCategorias()
+            );
+
+
+            cbFiltroCategoria
+                    .getItems()
+                    .add(
+                            "Todas as Categorias"
+                    );
+
+
+            for (
+                    Categoria categoria :
+                    categorias
+            ) {
+
+                cbFiltroCategoria
+                        .getItems()
+                        .add(
+                                categoria.getNome()
+                        );
             }
-        } catch(SQLException e){
-            System.err.println(e.getMessage());
-        }
 
-        cbFiltroEstado.getItems().setAll("Todos os Estados", "Concluído", "Pendente");
-
-        cbFiltroCategoria.getSelectionModel().selectFirst();
-        cbFiltroPrioridade.getSelectionModel().selectFirst();
-        cbFiltroEstado.getSelectionModel().selectFirst();
-    }
-
-    private void apresentarTabela(){
-        tblTarefas.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-
-        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-
-        colCategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategoria().getNome()));
-
-        colPrioridade.setCellValueFactory(new PropertyValueFactory<>("prioridade"));
-
-        colDataLimite.setCellValueFactory(new PropertyValueFactory<>("data_limite"));
-
-        colDataEntrega.setCellValueFactory(new PropertyValueFactory<>("data_entrega"));
-
-        colEstado.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado() ? "Concluído" : "Pendente"));
-
-        try(Connection conexao = LigacaoDB.conectarDB()){
-            TarefaDAO tarefaDAO = new TarefaDAO(conexao);
-            tarefas = FXCollections.observableArrayList(tarefaDAO.listarTarefas());
-
-            tblTarefas.setItems(tarefas);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+            System.err.println(
+                    "Erro ao carregar categorias:"
+            );
+
+            e.printStackTrace();
         }
+
+
+        // ESTADOS
+
+        cbFiltroEstado
+                .getItems()
+                .setAll(
+                        "Todos os Estados",
+                        "Concluído",
+                        "Pendente"
+                );
+
+
+        // SELECIONAR PRIMEIRO
+
+        cbFiltroCategoria
+                .getSelectionModel()
+                .selectFirst();
+
+        cbFiltroPrioridade
+                .getSelectionModel()
+                .selectFirst();
+
+        cbFiltroEstado
+                .getSelectionModel()
+                .selectFirst();
     }
 
-    @FXML
-    private void abrirAdicionarTarefa(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/AdicionarTarefa.fxml")
+    // =========================================================
+    // APRESENTAR TABELA
+    // =========================================================
+
+    private void apresentarTabela() {
+
+        tblTarefas.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
         );
 
-        Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Adicionar Tarefa");
-        Scene scene = new Scene(root);
+        // TÍTULO
 
-        stage.setScene(scene);
-        stage.show();
+        colTitulo.setCellValueFactory(
+                new PropertyValueFactory<>(
+                        "titulo"
+                )
+        );
+
+
+        // CATEGORIA
+
+        colCategoria.setCellValueFactory(
+                cellData ->
+                        new SimpleStringProperty(
+                                cellData
+                                        .getValue()
+                                        .getCategoria()
+                                        .getNome()
+                        )
+        );
+
+
+        // PRIORIDADE
+
+        colPrioridade.setCellValueFactory(
+                new PropertyValueFactory<>(
+                        "prioridade"
+                )
+        );
+
+
+        // DATA LIMITE
+
+        colDataLimite.setCellValueFactory(
+                new PropertyValueFactory<>(
+                        "data_limite"
+                )
+        );
+
+
+        // DATA ENTREGA
+
+        colDataEntrega.setCellValueFactory(
+                new PropertyValueFactory<>(
+                        "data_entrega"
+                )
+        );
+
+
+        // ESTADO
+
+        colEstado.setCellValueFactory(
+                cellData ->
+                        new SimpleStringProperty(
+                                cellData
+                                        .getValue()
+                                        .getEstado()
+                                        ? "Concluído"
+                                        : "Pendente"
+                        )
+        );
+
+
+        // CARREGAR TAREFAS
+
+        try (
+                Connection conexao =
+                        LigacaoDB.conectarDB()
+        ) {
+
+            TarefaDAO tarefaDAO =
+                    new TarefaDAO(conexao);
+
+
+            tarefas =
+                    FXCollections.observableArrayList(
+                            tarefaDAO.listarTarefas()
+                    );
+
+
+            configurarPaginacao(
+                    tarefas
+            );
+
+
+        } catch (SQLException e) {
+
+            System.err.println(
+                    "Erro ao carregar tarefas:"
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+
+    // =========================================================
+    // ABRIR ADICIONAR TAREFA
+    // =========================================================
+
+    @FXML
+    private void abrirAdicionarTarefa(
+            ActionEvent event
+    ) {
+
+        try {
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/fxml/AdicionarTarefa.fxml"
+                            )
+                    );
+
+            Parent root = loader.load();
+
+
+            Stage stage = new Stage();
+
+            stage.setTitle(
+                    "Adicionar Tarefa"
+            );
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
+
+
+            /*
+             * IMPORTANTE:
+             *
+             * Não usamos:
+             *
+             * tblTarefas.getScene().getWindow()
+             *
+             * porque isso pode ser null.
+             *
+             * O evento vem diretamente do botão,
+             * por isso conseguimos obter a janela através
+             * do próprio botão.
+             */
+
+            Stage janelaPrincipal =
+                    (Stage)
+                            ((Control) event.getSource())
+                                    .getScene()
+                                    .getWindow();
+
+
+            stage.initOwner(
+                    janelaPrincipal
+            );
+
+
+            stage.showAndWait();
+
+
+            // Atualizar a tabela depois de adicionar
+            apresentarTabela();
+
+
+        } catch (IOException e) {
+
+            System.err.println(
+                    "Erro ao abrir AdicionarTarefa.fxml:"
+            );
+
+            e.printStackTrace();
+        }
     }
 }

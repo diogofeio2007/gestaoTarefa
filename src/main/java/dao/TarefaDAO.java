@@ -45,7 +45,6 @@ public class TarefaDAO {
         }
     }
 
-    // todo Alterar a parte da categoria
     public ArrayList<Tarefa> listarTarefas(){
         Categoria categoria = new Categoria();
 
@@ -81,6 +80,31 @@ public class TarefaDAO {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;
+        }
+    }
+
+    public boolean atualizarEstado(Tarefa tarefa){
+        String query = "UPDATE tarefas SET (estado, data_entrega) = (true, CURRENT_DATE) WHERE id_tarefa = ?;";
+        try(PreparedStatement stmt = ligarDB.prepareStatement(query)){
+            stmt.setInt(1, tarefa.getId_tarefa());
+            stmt.execute();
+            return true;
+        }
+        catch (SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarTarefa(Tarefa tarefa){
+        String query = "DELETE FROM tarefas WHERE id_tarefa = ?;";
+        try(PreparedStatement stmt = ligarDB.prepareStatement(query)){
+            stmt.setInt(1, tarefa.getId_tarefa());
+            stmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return false;
         }
     }
 }

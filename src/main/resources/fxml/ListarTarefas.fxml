@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -23,18 +24,18 @@
         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
             <!-- ========================= -->
-            <!-- CABEÇALHO + FILTROS        -->
+            <!-- CABEÇALHO + FILTROS       -->
             <!-- ========================= -->
 
             <top>
 
-                <VBox spacing="15.0" BorderPane.alignment="CENTER">
+                <VBox spacing="35.0">
 
                     <children>
 
                         <!-- CABEÇALHO -->
 
-                        <GridPane alignment="CENTER" hgap="10.0" maxWidth="1.7976931348623157E308" vgap="8.0">
+                        <GridPane hgap="10.0" maxWidth="1.7976931348623157E308" vgap="8.0">
 
                             <columnConstraints>
 
@@ -64,9 +65,11 @@
 
                                 </Label>
 
+
                                 <!-- BOTÃO ADICIONAR -->
 
-                                <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minWidth="170.0" onAction="#abrirAdicionarTarefa" prefHeight="40.0" style="-fx-background-color: black; -fx-background-radius: 8; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 8;" text="+ Adicionar Tarefa" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Button minWidth="170.0" onAction="#abrirAdicionarTarefa" prefHeight="40.0" style="-fx-background-color: black; -fx-background-radius: 8; -fx-text-fill: white;" text="+ Adicionar Tarefa" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
 
                                 <!-- SEPARADOR -->
 
@@ -85,23 +88,13 @@
 
                             <columnConstraints>
 
-                                <!-- Pesquisa -->
-
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="30.0" />
 
-                                <!-- Categoria -->
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="18.0" />
 
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="18.0" />
 
-                                <!-- Prioridade -->
-
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="18.0" />
-
-                                <!-- Estado -->
-
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="18.0" />
-
-                                <!-- Limpar -->
 
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" percentWidth="16.0" />
 
@@ -122,17 +115,17 @@
 
                                 <!-- CATEGORIA -->
 
-                                <ComboBox fx:id="cbFiltroCategoria" editable="false" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="1" />
+                                <ComboBox fx:id="cbFiltroCategoria" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="1" />
 
 
                                 <!-- PRIORIDADE -->
 
-                                <ComboBox fx:id="cbFiltroPrioridade" editable="false" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="2" />
+                                <ComboBox fx:id="cbFiltroPrioridade" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="2" />
 
 
                                 <!-- ESTADO -->
 
-                                <ComboBox fx:id="cbFiltroEstado" editable="false" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="3" />
+                                <ComboBox fx:id="cbFiltroEstado" maxWidth="1.7976931348623157E308" onAction="#filtrarTabela" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 8;" GridPane.columnIndex="3" />
 
 
                                 <!-- LIMPAR FILTROS -->
@@ -148,49 +141,58 @@
                 </VBox>
 
             </top>
+
+
+            <!-- ========================= -->
+            <!-- TABELA + PAGINAÇÃO         -->
+            <!-- ========================= -->
+
             <center>
-                <TableView fx:id="tblTarefas" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-font-size: 18px;" BorderPane.alignment="CENTER">
-                    <columns>
 
-                        <!-- TÍTULO -->
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="12.0">
 
-                        <TableColumn fx:id="colTitulo" prefWidth="220.0" text="Título" />
+                    <children>
 
+                        <!-- TABELA -->
 
-                        <!-- CATEGORIA -->
+                        <TableView fx:id="tblTarefas" maxHeight="460.0" maxWidth="1.7976931348623157E308" prefHeight="460.0" style="-fx-font-size: 18px;" VBox.vgrow="ALWAYS">
 
-                        <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria" />
+                            <columns>
 
+                                <TableColumn fx:id="colTitulo" prefWidth="220.0" text="Título" />
 
-                        <!-- PRIORIDADE -->
+                                <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria" />
 
-                        <TableColumn fx:id="colPrioridade" prefWidth="140.0" text="Prioridade" />
+                                <TableColumn fx:id="colPrioridade" prefWidth="140.0" text="Prioridade" />
 
+                                <TableColumn fx:id="colDataLimite" prefWidth="150.0" text="Data Limite" />
 
-                        <!-- DATA LIMITE -->
+                                <TableColumn fx:id="colDataEntrega" prefWidth="150.0" text="Data Entrega" />
 
-                        <TableColumn fx:id="colDataLimite" prefWidth="150.0" text="Data Limite" />
+                                <TableColumn fx:id="colEstado" prefWidth="140.0" text="Estado" />
 
+                                <TableColumn fx:id="colAcao" prefWidth="180.0" text="Ações" />
 
-                        <!-- DATA ENTREGA -->
+                            </columns>
 
-                        <TableColumn fx:id="colDataEntrega" prefWidth="150.0" text="Data Entrega" />
-
-
-                        <!-- ESTADO -->
-
-                        <TableColumn fx:id="colEstado" prefWidth="140.0" text="Estado" />
+                        </TableView>
 
 
-                        <!-- AÇÕES -->
+                        <!-- PAGINAÇÃO -->
 
-                        <TableColumn fx:id="colAcao" prefWidth="180.0" text="Ações" />
-                    </columns>
-                    <BorderPane.margin>
-                        <Insets top="15.0" />
-                    </BorderPane.margin>
-                </TableView>
+                        <Pagination fx:id="paginacao" maxHeight="40.0" maxPageIndicatorCount="5" prefHeight="40.0" VBox.vgrow="NEVER" />
+
+                    </children>
+               <BorderPane.margin>
+                  <Insets top="20.0" />
+               </BorderPane.margin>
+
+                </VBox>
+
             </center>
+
         </BorderPane>
+
     </children>
+
 </AnchorPane>
