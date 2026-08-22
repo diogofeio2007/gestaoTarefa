@@ -7,14 +7,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/ListarTarefas.fxml"));
+                getClass().getResource("/fxml/EcraPrincipal.fxml"));
 
         Scene scene = new Scene(loader.load());
 
         stage.setTitle("Gestor de Tarefas");
-        stage.setMaximized(true);
+        //  stage.setMaximized(true);
         stage.setScene(scene);
 
         stage.show();

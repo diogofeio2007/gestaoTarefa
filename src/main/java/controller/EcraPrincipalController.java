@@ -6,7 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Control;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -15,51 +16,61 @@ import java.io.IOException;
 public class EcraPrincipalController {
 
     @FXML
-    private Hyperlink hlTarefas;
+    private Button hlTarefas;
 
     @FXML
-    private Hyperlink hlCategorias;
+    private Button hlCategorias;
 
     @FXML
-    private Hyperlink hlAddTarefas;
+    private Button hlAddTarefas;
 
     @FXML
     private Button btnVerTarefas;
 
-    //TODO 1 - Resolver para o Button quando queremos abrir o ListarTarefas.fxml
+    @FXML
+    private BorderPane bpMain;
+
     @FXML
     public void abrirListarTarefas(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ListarTarefas.fxml"));
 
-            Stage stage = (Stage) ((Hyperlink) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ListarTarefas.fxml"));
+
+            Stage janelaAtual = (Stage) ((Control)event.getSource()).getScene().getWindow();
+
+            Scene scene = new Scene(loader.load());
 
 
-            Scene novaCena = new Scene(root);
-
-            stage.setTitle("Listar Tarefas");
+            Stage stage = new Stage();
+            stage.setTitle("Gestor de Tarefas");
             stage.setMaximized(true);
-            stage.setScene(novaCena);
-            stage.show();
+            stage.setScene(scene);
 
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar o ficheiro FXML. Verifique o caminho!");
+            stage.show();
+            janelaAtual.close();
+
+        } catch (IOException e) {
+            System.err.println("Erro ao abrir AdicionarTarefa.fxml:");
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void abrirAdicionarTarefa(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdicionarTarefa.fxml"));
+    public void abrirAdicionarTarefa() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdicionarTarefa.fxml"));
 
-        Parent root = loader.load();
+            Parent root = loader.load();
 
-        Stage stage = new Stage();
-        stage.setTitle("Editar Tarefa");
-        stage.setScene(new Scene(root));
+            Stage stage = new Stage();
+            stage.setTitle("Editar Tarefa");
+            stage.setScene(new Scene(root));
 
-        stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.APPLICATION_MODAL);
 
-        stage.showAndWait();
+            stage.showAndWait();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

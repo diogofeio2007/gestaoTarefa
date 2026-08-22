@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,212 +9,85 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane minHeight="600" minWidth="900" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EcraPrincipalController">
-
-   <!-- ========================= -->
-   <!-- MENU LATERAL              -->
-   <!-- ========================= -->
-
+<?import javafx.scene.control.Label?>
+<BorderPane fx:id="bpMenu" minHeight="600" minWidth="900" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EcraPrincipalController">
    <left>
-      <VBox maxWidth="350" minWidth="220" prefWidth="300" style="-fx-background-color: black;">
-
+      <VBox minWidth="220" prefWidth="400" styleClass="menu-lateral">
          <padding>
-            <Insets bottom="25" left="20" right="20" top="25" />
+            <Insets bottom="25" left="20" right="20" top="25"/>
          </padding>
-
          <spacing>25</spacing>
 
          <!-- LOGÓTIPO -->
 
          <HBox alignment="CENTER_LEFT" spacing="15">
-
             <ImageView fitHeight="35" fitWidth="35" pickOnBounds="true" preserveRatio="true">
-
                <image>
-                  <Image url="@../images/logotipo.png" />
+                  <Image url="@../images/logotipo.png"/>
                </image>
-
             </ImageView>
-
-            <Text fill="WHITE" text="Gestor de Tarefas">
-
-               <font>
-                  <Font name="System Bold" size="22" />
-               </font>
-
-            </Text>
-
+            <Label text="Gestor de Tarefas" styleClass="menu-logo"/>
          </HBox>
 
-
-         <!-- MENU -->
-
          <VBox spacing="10">
-
-            <!-- TAREFAS -->
-
-            <Hyperlink fx:id="hlTarefas" maxWidth="1.7976931348623157E308" onAction="#abrirListarTarefas" style="-fx-border-color: transparent;">
-
+            <Button fx:id="hlTarefas" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirListarTarefas" text="Tarefas" styleClass="menu-button">
                <graphic>
-
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-
-                     <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
-
-                        <image>
-                           <Image url="@../images/tarefas_branco.png" />
-                        </image>
-
-                     </ImageView>
-
-                     <Text fill="WHITE" text="Tarefas">
-
-                        <font>
-                           <Font size="22" />
-                        </font>
-
-                     </Text>
-
-                  </HBox>
-
+                  <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tarefas_branco.png"/>
+                     </image>
+                  </ImageView>
                </graphic>
+            </Button>
 
-            </Hyperlink>
 
+            <!-- ========================= -->
+            <!-- CATEGORIAS                -->
+            <!-- ========================= -->
 
-            <!-- CATEGORIAS -->
-
-            <Hyperlink fx:id="hlCategorias" maxWidth="1.7976931348623157E308" style="-fx-border-color: transparent;">
-
+            <Button fx:id="hlCategorias" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Categorias" styleClass="menu-button">
                <graphic>
-
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-
-                     <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
-
-                        <image>
-                           <Image url="@../images/categorias.png" />
-                        </image>
-
-                     </ImageView>
-
-                     <Text fill="WHITE" text="Categorias">
-
-                        <font>
-                           <Font size="22" />
-                        </font>
-
-                     </Text>
-
-                  </HBox>
-
+                  <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/categorias.png"/>
+                     </image>
+                  </ImageView>
                </graphic>
+            </Button>
 
-            </Hyperlink>
-
-
-            <!-- ADICIONAR TAREFA -->
-
-            <Hyperlink fx:id="hlAddTarefas" maxWidth="1.7976931348623157E308" onAction="#abrirAdicionarTarefa" style="-fx-border-color: transparent;">
-
+            <Button fx:id="hlAddTarefas" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirAdicionarTarefa" text="Adicionar Tarefa" styleClass="menu-button">
                <graphic>
-
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-
-                     <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
-
-                        <image>
-                           <Image url="@../images/adicionar_branco.png" />
-                        </image>
-
-                     </ImageView>
-
-                     <Text fill="WHITE" text="Adicionar Tarefa">
-
-                        <font>
-                           <Font size="22" />
-                        </font>
-
-                     </Text>
-
-                  </HBox>
-
+                  <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/adicionar_branco.png"/>
+                     </image>
+                  </ImageView>
                </graphic>
-
-            </Hyperlink>
-
+            </Button>
          </VBox>
-
-
-         <!-- ESPAÇO FLEXÍVEL -->
-
-         <Region VBox.vgrow="ALWAYS" />
-
+         <Region VBox.vgrow="ALWAYS"/>
       </VBox>
-
    </left>
 
-
-   <!-- ========================= -->
-   <!-- CONTEÚDO PRINCIPAL        -->
-   <!-- ========================= -->
-
    <center>
-
       <VBox alignment="CENTER" spacing="30">
 
          <padding>
-            <Insets bottom="40" left="40" right="40" top="40" />
+            <Insets bottom="40" left="40" right="40" top="40"/>
          </padding>
 
-
-         <!-- IMAGEM -->
-
          <ImageView fitHeight="180" fitWidth="220" pickOnBounds="true" preserveRatio="true">
-
             <image>
-               <Image url="@../images/concluir.png" />
+               <Image url="@../images/concluir.png"/>
             </image>
-
          </ImageView>
 
+         <Label text="Bem-vindo/a" styleClass="titulo-principal"/>
 
-         <!-- TÍTULO -->
+         <Label text="Organiza as tuas tarefas de forma simples e eficiente." styleClass="descricao-principal" wrapText="true"/>
 
-         <Text text="Bem-vindo/a" textAlignment="CENTER">
-
-            <font>
-               <Font name="System Bold" size="36" />
-            </font>
-
-         </Text>
-
-
-         <!-- DESCRIÇÃO -->
-
-         <Text text="Organiza as tuas tarefas de forma simples e eficiente." textAlignment="CENTER" wrappingWidth="600">
-
-            <font>
-               <Font name="System" size="22" />
-            </font>
-
-         </Text>
-
-
-         <!-- BOTÃO -->
-
-         <Button fx:id="btnVerTarefas" mnemonicParsing="false" onAction="#abrirListarTarefas" prefHeight="45" prefWidth="180" text="Ver Tarefas">
-
-            <font>
-               <Font name="System Bold" size="16" />
-            </font>
-
-         </Button>
-
+         <Button fx:id="btnVerTarefas" mnemonicParsing="false" onAction="#abrirListarTarefas" prefHeight="45" prefWidth="180" text="Ver Tarefas" styleClass="button-principal"/>
       </VBox>
-
    </center>
-
 </BorderPane>

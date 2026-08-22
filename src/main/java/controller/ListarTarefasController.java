@@ -84,7 +84,7 @@ public class ListarTarefasController {
     @FXML
     private Pagination paginacao;
 
-    private static final int TAREFAS_POR_PAGINA = 10;
+    private static final int TAREFAS_POR_PAGINA = 8;
 
 
     // =========================================================
@@ -125,18 +125,19 @@ public class ListarTarefasController {
                 new TableCell<Tarefa, Void>() {
 
                     private final Button btnEditar = new Button();
+                    {
+                        btnEditar.getStyleClass().add("button-tabela");
+                    }
                     private final Button btnConcluir = new Button();
+                    {
+                        btnConcluir.getStyleClass().add("button-tabela");
+                    }
                     private final Button btnEliminar = new Button();
+                    {
+                        btnEliminar.getStyleClass().add("button-tabela");
+                    }
 
-                    private final ImageView imgEditarView =
-                            new ImageView(
-                                    new Image(
-                                            getClass()
-                                                    .getResourceAsStream(
-                                                            "/images/editar.png"
-                                                    )
-                                    )
-                            );
+                    private final ImageView imgEditarView = new ImageView(new Image(getClass().getResourceAsStream("/images/editar.png")));
 
                     private final ImageView imgConcluirView =
                             new ImageView(
@@ -165,7 +166,6 @@ public class ListarTarefasController {
                                     btnConcluir,
                                     btnEliminar
                             );
-
 
                     {
                         configurarImagem(imgEditarView);
@@ -251,22 +251,32 @@ public class ListarTarefasController {
     // PAGINAÇÃO
     // =========================================================
 
-    private void configurarPaginacao(ObservableList<Tarefa> lista) {
+    private void configurarPaginacao(
+            ObservableList<Tarefa> lista
+    ) {
 
         int numeroPaginas = (int) Math.ceil(
-                (double) lista.size() / TAREFAS_POR_PAGINA
+                (double) lista.size()
+                        / TAREFAS_POR_PAGINA
         );
 
-        paginacao.setPageCount(Math.max(numeroPaginas, 1));
+        paginacao.setPageCount(
+                Math.max(numeroPaginas, 1)
+        );
 
         paginacao.setCurrentPageIndex(0);
 
-        paginacao.setPageFactory(paginaIndex -> {
+        paginacao.setPageFactory(
+                paginaIndex -> {
 
-            mostrarPagina(paginaIndex, lista);
+                    mostrarPagina(
+                            paginaIndex,
+                            lista
+                    );
 
-            return new VBox();
-        });
+                    return new VBox();
+                }
+        );
     }
 
 
@@ -274,26 +284,44 @@ public class ListarTarefasController {
     // MOSTRAR PÁGINA
     // =========================================================
 
-    private void mostrarPagina(int pagina, ObservableList<Tarefa> lista) {
+    private void mostrarPagina(
+            int pagina,
+            ObservableList<Tarefa> lista
+    ) {
 
-        int inicio = pagina * TAREFAS_POR_PAGINA;
+        int inicio =
+                pagina * TAREFAS_POR_PAGINA;
+
 
         if (inicio >= lista.size()) {
-            tblTarefas.setItems(FXCollections.observableArrayList());
+
+            tblTarefas.setItems(
+                    FXCollections.observableArrayList()
+            );
+
             return;
         }
 
-        int fim = Math.min(
-                inicio + TAREFAS_POR_PAGINA,
-                lista.size()
-        );
+
+        int fim =
+                Math.min(
+                        inicio + TAREFAS_POR_PAGINA,
+                        lista.size()
+                );
+
 
         ObservableList<Tarefa> paginaAtual =
                 FXCollections.observableArrayList(
-                        lista.subList(inicio, fim)
+                        lista.subList(
+                                inicio,
+                                fim
+                        )
                 );
 
-        tblTarefas.setItems(paginaAtual);
+
+        tblTarefas.setItems(
+                paginaAtual
+        );
     }
 
 
@@ -322,7 +350,9 @@ public class ListarTarefasController {
 
             Stage stage = new Stage();
 
-            stage.setTitle("Editar Tarefa");
+            stage.setTitle(
+                    "Editar Tarefa"
+            );
 
             stage.setScene(
                     new Scene(root)
@@ -331,11 +361,6 @@ public class ListarTarefasController {
             stage.initModality(
                     Modality.APPLICATION_MODAL
             );
-
-            /*
-             * Aqui usamos a Scene da tabela porque neste momento
-             * ela já está aberta.
-             */
 
             stage.initOwner(
                     tblTarefas
@@ -346,7 +371,6 @@ public class ListarTarefasController {
             stage.showAndWait();
 
 
-            // Atualizar dados depois de fechar
             apresentarTabela();
 
         } catch (IOException e) {
@@ -385,7 +409,9 @@ public class ListarTarefasController {
 
             Stage stage = new Stage();
 
-            stage.setTitle("Concluir Tarefa");
+            stage.setTitle(
+                    "Concluir Tarefa"
+            );
 
             stage.setScene(
                     new Scene(root)
@@ -442,7 +468,9 @@ public class ListarTarefasController {
 
             Stage stage = new Stage();
 
-            stage.setTitle("Eliminar Tarefa");
+            stage.setTitle(
+                    "Eliminar Tarefa"
+            );
 
             stage.setScene(
                     new Scene(root)
@@ -611,7 +639,9 @@ public class ListarTarefasController {
 
             if (valido) {
 
-                tarefasFiltradas.add(tarefa);
+                tarefasFiltradas.add(
+                        tarefa
+                );
             }
         }
 
@@ -884,20 +914,6 @@ public class ListarTarefasController {
             );
 
 
-            /*
-             * IMPORTANTE:
-             *
-             * Não usamos:
-             *
-             * tblTarefas.getScene().getWindow()
-             *
-             * porque isso pode ser null.
-             *
-             * O evento vem diretamente do botão,
-             * por isso conseguimos obter a janela através
-             * do próprio botão.
-             */
-
             Stage janelaPrincipal =
                     (Stage)
                             ((Control) event.getSource())
@@ -913,7 +929,6 @@ public class ListarTarefasController {
             stage.showAndWait();
 
 
-            // Atualizar a tabela depois de adicionar
             apresentarTabela();
 
 

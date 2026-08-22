@@ -46,9 +46,8 @@ public class TarefaDAO {
     }
 
     public ArrayList<Tarefa> listarTarefas(){
-        Categoria categoria = new Categoria();
 
-        String query = "SELECT tarefas.id_tarefa, tarefas.titulo, tarefas.id_cat, categorias.nome, tarefas.prioridade, tarefas.estado, tarefas.data_criacao, tarefas.data_limite, tarefas.data_entrega, tarefas.descricao FROM tarefas JOIN categorias ON tarefas.id_cat = categorias.id_cat;";
+        String query = "SELECT tarefas.id_tarefa, tarefas.titulo, tarefas.id_cat, categorias.nome, tarefas.prioridade, tarefas.estado, tarefas.data_criacao, tarefas.data_limite, tarefas.data_entrega, tarefas.descricao FROM tarefas JOIN categorias ON tarefas.id_cat = categorias.id_cat ORDER BY tarefas.estado ASC, tarefas.data_limite ASC;";
 
         try(PreparedStatement stmt = ligarDB.prepareStatement(query)){
             ResultSet rs = stmt.executeQuery();
@@ -59,6 +58,8 @@ public class TarefaDAO {
                 tarefa.setTitulo(rs.getString("titulo"));
                 tarefa.setPrioridade(rs.getString("prioridade"));
                 tarefa.setEstado(rs.getBoolean("estado"));
+
+                Categoria categoria = new Categoria();
 
                 categoria.setId_cat(rs.getInt("id_cat"));
                 categoria.setNome(rs.getString("nome"));

@@ -14,83 +14,84 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditarTarefaController">
-<children>
-<VBox spacing="10.0" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20">
-<Label text="Atualizar Tarefa">
-            <font>
-               <Font name="Arial Bold" size="30" />
-            </font>
-            <VBox.margin>
-               <Insets left="20.0" right="20.0" />
-            </VBox.margin>
-         </Label>
-<Separator prefWidth="552.0">
-            <VBox.margin>
-               <Insets left="20.0" right="20.0" />
-            </VBox.margin></Separator>
-<GridPane hgap="40" vgap="20">
-<columnConstraints><ColumnConstraints hgrow="ALWAYS" percentWidth="50" /><ColumnConstraints hgrow="ALWAYS" percentWidth="50" /></columnConstraints>
-<children>
-      <VBox spacing="8" GridPane.rowIndex="1">
-                  <Label text="Prioridade *" />
-                  <ComboBox fx:id="cbPrioridade" maxWidth="1.7976931348623157E308" promptText="Seleione a Prioridade" />
-                  <Label fx:id="lbErroPrioridade" mouseTransparent="true" text="A prioridade é obrigatória." textFill="RED" visible="false">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-               </VBox>
-<VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0"><Label text="Título *" /><TextField fx:id="txtTitulo" promptText="Insira o título..." />
-                  <Label fx:id="lbErroTitulo" text="O título é obrigatório." textFill="RED" visible="false">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label></VBox>
-<VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0"><Label text="Categoria *" /><ComboBox fx:id="cbCategoria" maxWidth="1.7976931348623157E308" promptText="Selecione uma Categoria" />
-                  <Label fx:id="lbErroCategoria" text="A categoria é obrigatória." textFill="RED" visible="false">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label></VBox>
-<VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1"><Label text="Data Limite" /><DatePicker fx:id="dpDataLimite" maxWidth="1.7976931348623157E308" promptText="dd/mm/aaaa" /></VBox>
-<VBox spacing="8" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2"><Label text="Descrição" /><TextArea fx:id="txtDescricao" prefRowCount="5" promptText="Descrição da tarefa (opcional)..." /></VBox>
-</children>
-            <rowConstraints>
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-            </rowConstraints>
-            <VBox.margin>
-               <Insets left="20.0" right="20.0" />
-            </VBox.margin>
-</GridPane>
-<HBox alignment="CENTER_RIGHT" spacing="30">
-    <Button  fx:id="btnCancelar" onAction="#abrirListarTarefas" prefWidth="180.0" text="Cancelar" />
-    <Button onAction="#guardarTarefa" prefWidth="180" style="-fx-background-color:black;-fx-text-fill:white;" text="Guardar" />
-            <VBox.margin>
-               <Insets left="20.0" right="20.0" top="8.0" />
-            </VBox.margin></HBox>
-         <HBox alignment="BOTTOM_LEFT">
-            <children>
-               <Label text="* Campos obrigatórios">
-                  <HBox.margin>
-                     <Insets left="20.0" right="20.0" />
-                  </HBox.margin>
-                  <font>
-                     <Font size="11.0" />
-                  </font>
-               </Label>
-            </children>
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </HBox>
-</VBox>
-</children>
+<AnchorPane prefWidth="600.0" styleClass="background" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditarTarefaController">
+    <children>
+        <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+            <Label text="Atualizar Tarefa" styleClass="titulo">
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0"/>
+                </VBox.margin>
+            </Label>
+
+            <Separator styleClass="separator">
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0"/>
+                </VBox.margin>
+            </Separator>
+
+            <GridPane hgap="40.0" vgap="20.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                </rowConstraints>
+                <children>
+
+                    <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Título *" styleClass="label"/>
+                        <TextField fx:id="txtTitulo" promptText="Insira o título..." styleClass="text-field"/>
+
+                        <Label fx:id="lbErroTitulo" styleClass="label-erro" text="O título é obrigatório." visible="false"/>
+                    </VBox>
+
+                    <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Categoria *" styleClass="label"/>
+                        <ComboBox fx:id="cbCategoria" maxWidth="1.7976931348623157E308" promptText="Selecione uma Categoria" styleClass="combo-box"/>
+                        <Label fx:id="lbErroCategoria" styleClass="label-erro" text="A categoria é obrigatória." visible="false"/>
+                    </VBox>
+
+                    <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Prioridade *" styleClass="label"/>
+                        <ComboBox fx:id="cbPrioridade" maxWidth="1.7976931348623157E308" promptText="Selecione a Prioridade" styleClass="combo-box"/>
+                        <Label fx:id="lbErroPrioridade" styleClass="label-erro" text="A prioridade é obrigatória." visible="false"/>
+                    </VBox>
+
+                    <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Data Limite" styleClass="label"/>
+                        <DatePicker fx:id="dpDataLimite" maxWidth="1.7976931348623157E308" promptText="dd/mm/aaaa" styleClass="date-picker"/>
+                    </VBox>
+
+                    <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Label text="Descrição" styleClass="label"/>
+                        <TextArea fx:id="txtDescricao" prefRowCount="5" promptText="Descrição da tarefa (opcional)..." styleClass="text-area"/>
+                    </VBox>
+                </children>
+
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0"/>
+                </VBox.margin>
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT" spacing="30.0">
+                <Button fx:id="btnCancelar" onAction="#abrirListarTarefas" prefWidth="180.0" styleClass="button-cancelar" text="Cancelar"/>
+                <Button onAction="#guardarTarefa" prefWidth="180.0" styleClass="button-principal" text="Guardar" />
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="8.0"/>
+                    </VBox.margin>
+            </HBox>
+
+            <HBox alignment="BOTTOM_LEFT">
+                <Label styleClass="label-obrigatorio" text="* Campos obrigatórios">
+                    <HBox.margin>
+                        <Insets left="20.0" right="20.0"/>
+                    </HBox.margin>
+                </Label>
+            </HBox>
+        </VBox>
+    </children>
 </AnchorPane>
